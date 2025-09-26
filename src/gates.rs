@@ -9,7 +9,7 @@ impl Gate {
         Self {
             let rows = a[0];
             let cols = a[1];
-            let matrix = vec![vec![0.0; cols]; rows];
+            let matrix = vec![vec![Complex {real: 0.0, imag: 0,0}; cols]; rows];
 
             Self { matrix }
         }
