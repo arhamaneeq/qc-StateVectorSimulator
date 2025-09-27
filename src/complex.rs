@@ -15,10 +15,41 @@ impl ops::Add<Complex> for Complex {
     type Output = Complex;
 
     fn add(self, _rhs: Complex) -> Complex {
-        let result = Complex {real: self.real + _rhs.real, i: self.imag  + _rhs.imag};
+        let result = Complex {real: self.real + _rhs.real, imag: self.imag  + _rhs.imag};
+
+        Result
+    }
+}
+
+impl ops::Sub<Complex> for Complex {
+    type Output = Complex;
+
+    fn sub(self, _rhs: Complex) -> Complex {
+        let result = Complex {real: self.real - _rhs.real, imag: self.imag - _rhs.imag};
+        
+        result
+    }
+}
+
+impl ops::Mul<Complex> for Complex {
+    type Output = Complex;
+
+    fn mul(self, _rhs: Complex) -> {
+        let result = Complex {
+            real: self.real * _rhs.real - self.imag * _rhs.imag,
+            imag: self.real * _rhs.imag + self.imag * _rhs.real
+        }
 
         result
     }
 }
 
+impl ops::Neg for Complex {
+    type Output = Complex
 
+        fn neg(self) -> Complex {
+            let result = Complex {real: -self.real, imag: -self.imag};
+
+            result
+        }
+}
