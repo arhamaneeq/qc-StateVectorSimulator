@@ -1,8 +1,7 @@
 mod complex;
-mod gates;
-
-use crate::gates::Matrix;
+mod gate;
+mod matrix;
 
 fn main() {
-    println!("Hello World!");
+    //  TODO:
 }
