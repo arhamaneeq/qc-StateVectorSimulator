@@ -8,7 +8,7 @@ pub struct Matrix {
 }
 
 impl Matrix {
-    pub fn new(a: [usize; 2]) -> Self {
+    pub fn zeroes(a: [usize; 2]) -> Self {
         let rows: usize = a[0];
         let cols: usize = a[1];
 
@@ -20,6 +20,45 @@ impl Matrix {
             height: rows,
         }
     }
+
+    pub fn identity(a: [usize; 2]) -> Self {
+        assert_eq!(a[0], a[1], "Matrix should be square");
+        let mut matrix: Matrix = Matrix::zeroes(a);
+
+        for i in 0..matrix.width {
+            matrix[(i, i)] = Complex::new(1.0, 0.0);
+        }
+
+        matrix
+    }
+
+    pub fn transpose(self) -> Self {
+        let mut matrix: Matrix = Matrix::zeroes([self.height, self.width]);
+
+        for i in 0..self.height {
+            for j in 0..self.width {
+                matrix[(i, j)] = self[(j, i)]
+            }
+        }
+
+        matrix
+    }
+
+    pub fn conjugate(self) -> Self {
+        let mut matrix: Matrix = Matrix::zeroes([self.height, self.width]);
+
+        for i in 0..self.height {
+            for j in 0..self.width {
+                matrix[(i, j)] = self[(i, j)].conj();
+            }
+        }
+
+        matrix
+    }
+
+    pub fn dagger(self) -> Self {
+        self.conjugate().transpose()
+    }
 }
 
 impl std::ops::Mul<&Matrix> for Matrix {
@@ -28,7 +67,7 @@ impl std::ops::Mul<&Matrix> for Matrix {
     fn mul(self: Matrix, _rhs: &Matrix) -> Matrix {
         assert_eq!(self.width, _rhs.height, "Dimension mismatch!");
 
-        let mut result: Matrix = Matrix::new([self.height, _rhs.width]);
+        let mut result: Matrix = Matrix::zeroes([self.height, _rhs.width]);
 
         for i in 0..self.height {
             for j in 0.._rhs.width {
@@ -56,7 +95,7 @@ impl std::ops::BitXor<&Matrix> for Matrix {
         let p: usize = _rhs.height;
         let q: usize = _rhs.width;
 
-        let mut result: Matrix = Matrix::new([m * p, n * q]);
+        let mut result: Matrix = Matrix::zeroes([m * p, n * q]);
 
         for i in 0..m {
             for j in 0..n {

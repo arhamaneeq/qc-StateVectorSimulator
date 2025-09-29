@@ -1,5 +1,3 @@
-use std::ops;
-
 #[derive(Clone, Copy, Debug)]
 pub struct Complex {
     pub real: f32,
@@ -13,9 +11,34 @@ impl Complex {
             imag: imag,
         }
     }
+
+    pub fn polar(r: f32, theta: f32) -> Self {
+        Self {
+            real: r * f32::cos(theta),
+            imag: r * f32::sin(theta),
+        }
+    }
+
+    pub fn norm(self) -> f32 {
+        let norm_sq: f32 = self.real.powi(2) + self.imag.powi(2);
+        let sqrt_norm_sq: f32 = norm_sq.sqrt();
+
+        sqrt_norm_sq
+    }
+
+    pub fn normalize(self) -> Complex {
+        let norm: f32 = self.norm();
+        let normalized_complex: Complex = Complex::new(self.real / norm, self.imag / norm);
+
+        normalized_complex
+    }
+
+    pub fn conj(self) -> Complex {
+        Complex::new(self.real, -self.imag)
+    }
 }
 
-impl ops::Add<Complex> for Complex {
+impl std::ops::Add<Complex> for Complex {
     type Output = Complex;
 
     fn add(self, _rhs: Complex) -> Complex {
@@ -28,7 +51,7 @@ impl ops::Add<Complex> for Complex {
     }
 }
 
-impl ops::Sub<Complex> for Complex {
+impl std::ops::Sub<Complex> for Complex {
     type Output = Complex;
 
     fn sub(self, _rhs: Complex) -> Complex {
@@ -41,7 +64,7 @@ impl ops::Sub<Complex> for Complex {
     }
 }
 
-impl ops::Mul<Complex> for Complex {
+impl std::ops::Mul<Complex> for Complex {
     type Output = Complex;
 
     fn mul(self, _rhs: Complex) -> Complex {
@@ -54,7 +77,7 @@ impl ops::Mul<Complex> for Complex {
     }
 }
 
-impl ops::Neg for Complex {
+impl std::ops::Neg for Complex {
     type Output = Complex;
 
     fn neg(self) -> Complex {
@@ -67,7 +90,7 @@ impl ops::Neg for Complex {
     }
 }
 
-impl ops::Div for Complex {
+impl std::ops::Div for Complex {
     type Output = Complex;
 
     fn div(self, _rhs: Complex) -> Complex {
