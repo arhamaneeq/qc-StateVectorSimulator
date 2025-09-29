@@ -1,17 +1,16 @@
-mod complex;
+use crate::complex::Complex;
 
 pub struct Gate {
-    let mut matrix : Vec<Vec<Complex>>,
+    matrix: Vec<Vec<Complex>>,
 }
 
 impl Gate {
-    pub fn new(a: [u, 2]) -> Self {
-        Self {
-            let rows = a[0];
-            let cols = a[1];
-            let matrix = vec![vec![Complex {real: 0.0, imag: 0,0}; cols]; rows];
+    pub fn new(a: [usize; 2]) -> Self {
+        let rows: usize = a[0];
+        let cols: usize = a[1];
 
-            Self { matrix }
-        }
+        let matrix: Vec<Vec<Complex>> = vec![vec![Complex::new(0.0, 0.0); cols]; rows];
+
+        Self { matrix }
     }
 }
