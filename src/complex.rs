@@ -1,5 +1,6 @@
 use std::ops;
 
+#[derive(Clone, Copy, Debug)]
 pub struct Complex {
     pub real: f32,
     pub imag: f32,
@@ -18,7 +19,7 @@ impl ops::Add<Complex> for Complex {
     type Output = Complex;
 
     fn add(self, _rhs: Complex) -> Complex {
-        let result = Complex {
+        let result: Complex = Complex {
             real: self.real + _rhs.real,
             imag: self.imag + _rhs.imag,
         };
@@ -31,7 +32,7 @@ impl ops::Sub<Complex> for Complex {
     type Output = Complex;
 
     fn sub(self, _rhs: Complex) -> Complex {
-        let result = Complex {
+        let result: Complex = Complex {
             real: self.real - _rhs.real,
             imag: self.imag - _rhs.imag,
         };
@@ -44,7 +45,7 @@ impl ops::Mul<Complex> for Complex {
     type Output = Complex;
 
     fn mul(self, _rhs: Complex) -> Complex {
-        let result = Complex {
+        let result: Complex = Complex {
             real: self.real * _rhs.real - self.imag * _rhs.imag,
             imag: self.real * _rhs.imag + self.imag * _rhs.real,
         };
@@ -57,7 +58,7 @@ impl ops::Neg for Complex {
     type Output = Complex;
 
     fn neg(self) -> Complex {
-        let result = Complex {
+        let result: Complex = Complex {
             real: -self.real,
             imag: -self.imag,
         };
@@ -70,7 +71,7 @@ impl ops::Div for Complex {
     type Output = Complex;
 
     fn div(self, _rhs: Complex) -> Complex {
-        let result = Complex {
+        let result: Complex = Complex {
             real: (self.real * _rhs.real + self.imag * _rhs.imag)
                 / (_rhs.real * _rhs.real + _rhs.imag * _rhs.imag),
             imag: (-self.real * _rhs.imag + self.imag * _rhs.real)
