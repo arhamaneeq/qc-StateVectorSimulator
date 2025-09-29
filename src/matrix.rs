@@ -1,7 +1,8 @@
 use crate::complex::Complex;
 
+#[derive(Clone, Debug)]
 pub struct Matrix {
-    matrix: Vec<Vec<Complex>>,
+    matrix: Vec<Complex>,
     width: usize,
     height: usize,
 }
@@ -11,7 +12,7 @@ impl Matrix {
         let rows: usize = a[0];
         let cols: usize = a[1];
 
-        let matrix: Vec<Vec<Complex>> = vec![vec![Complex::new(0.0, 0.0); cols]; rows];
+        let matrix: Vec<Complex> = vec![Complex::new(0.0, 0.0); rows * cols];
 
         Self {
             matrix: matrix,
@@ -21,10 +22,10 @@ impl Matrix {
     }
 }
 
-impl std::ops::Mul<Matrix> for Matrix {
+impl std::ops::Mul<&Matrix> for Matrix {
     type Output = Matrix;
 
-    fn mul(self: Matrix, _rhs: Matrix) -> Matrix {
+    fn mul(self: Matrix, _rhs: &Matrix) -> Matrix {
         assert_eq!(self.width, _rhs.height, "Dimension mismatch!");
 
         let mut result: Matrix = Matrix::new([self.height, _rhs.width]);
@@ -45,10 +46,11 @@ impl std::ops::Mul<Matrix> for Matrix {
     }
 }
 
-impl std::ops::BitXor<Matrix> for Matrix {
+impl std::ops::BitXor<&Matrix> for Matrix {
+    // Kronecker Product
     type Output = Matrix;
 
-    fn bitxor(self, _rhs: Matrix) -> Self::Output {
+    fn bitxor(self, _rhs: &Matrix) -> Self::Output {
         let m: usize = self.height;
         let n: usize = self.width;
         let p: usize = _rhs.height;
@@ -56,10 +58,10 @@ impl std::ops::BitXor<Matrix> for Matrix {
 
         let mut result: Matrix = Matrix::new([m * p, n * q]);
 
-        for i in 0..m - 1 {
-            for j in 0..n - 1 {
-                for k in 0..p - 1 {
-                    for l in 0..q - 1 {
+        for i in 0..m {
+            for j in 0..n {
+                for k in 0..p {
+                    for l in 0..q {
                         result[(i * p + k, j * q + l)] = self[(i, j)] * _rhs[(k, l)];
                     }
                 }
@@ -74,12 +76,12 @@ impl std::ops::Index<(usize, usize)> for Matrix {
     type Output = Complex;
 
     fn index(&self, (i, j): (usize, usize)) -> &Self::Output {
-        &self.matrix[i][j]
+        &self.matrix[i * self.width + j]
     }
 }
 
 impl std::ops::IndexMut<(usize, usize)> for Matrix {
     fn index_mut(&mut self, (i, j): (usize, usize)) -> &mut Self::Output {
-        &mut self.matrix[i][j]
+        &mut self.matrix[i * self.width + j]
     }
 }
