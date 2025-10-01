@@ -1,4 +1,6 @@
-use crate::complex::Complex;
+use std::intrinsics::sqrtf32;
+
+use crate::{complex::Complex, matrix};
 
 #[derive(Clone, Debug)]
 pub struct Matrix {
@@ -28,6 +30,103 @@ impl Matrix {
         for i in 0..matrix.width {
             matrix[(i, i)] = Complex::new(1.0, 0.0);
         }
+
+        matrix
+    }
+
+    pub fn fromData(data: Vector<Complex>, a: [usize; 2]) -> Matrix {
+        assert_eq!(data.len(), a[0] * a[1], "Data length does not match given shape!");
+
+        let w: usize = a[0];
+        let h: usize = a[1];
+
+        let mut matrix: Matrix = Matrix::zeroes(a);
+
+        for i in 0..w {
+            for j in 0..h {
+                matrix[(i,j)] = data[i*w + j];
+            }
+        }
+
+        matrix
+    }
+
+    pub fn X() -> Matrix {
+        let matrix: Matrix = Matrix::fromData(
+            vec![
+                Complex::new(0.0, 0.0), Complex::new(1.0, 0.0), 
+                Complex::new(1.0, 0.0), Complex::new(0.0, 0.0)], 
+            [2, 2]
+        );
+
+        matrix
+    }
+
+    pub fn Y() -> Matrix {
+        let matrix: Matrix = Matrix::fromData(
+            vec![
+                Complex::new(0.0, 0.0), Complex::new(0.0, -1.0),
+                Complex::new(0.0, 1.0), Complex::new(0.0, 0.0)],
+            [2, 2]
+        );
+
+        matrix 
+    }
+
+    pub fn Z() -> Matrix {
+        let matrix: Matrix = Matrix::fromData(
+            vec![
+                Complex::new(1.0, 0.0), Complex::new(0.0, 0.0),
+                Complex::new(1.0, 0.0), Complex::new(-1.0, 0.0)], 
+            [2, 2]
+        );
+
+        matrix
+    }
+
+    pub fn H() -> Matrix {
+        let s : f32 = (2.0f32).sqrt().recip();
+        let matrix : Matrix = Matrix::fromData(
+            vec![
+                Complex::new(s, 0.0), Complex::new(s, 0.0),
+                Complex::new(s, 0.0), Complex::new(-s, 0.0)
+            ], [2,2])
+
+        matrix
+    }
+
+    pub fn Rx(theta: f32) -> Matrix {
+        let ct : f32 = (theta / 2.0f32).cos();
+        let st : f32 = (theta / 2.0f32).sin();
+
+        let matrix : Matrix = Matrix::fromData(
+            vec![
+                Complex::new(ct, 0.0), Complex::new(0.0, -st),
+                Complex::new(0.0, -st), Complex::new(ct, 0.0)
+            ], [2, 2]);
+
+        matrix
+    }
+
+    pub fn Ry(theta: f32) -> Matrix {
+        let ct : f32 = (theta / 2.0f32).cos();
+        let st : f32 = (theta / 2.0f32).sin();
+
+        let matrix : Matrix = Matrix::fromData(
+            vec![
+                Complex::new(ct, 0.0), Complex::new(- st, 0.0),
+                Complex::new(st, 0.0), Complex::new(ct, 0.0)
+            ], [2, 2]);
+
+        matrix
+    }
+
+    pub fn Rz(theta: f32) -> Matrix {
+        let matrix : Matrix = Matrix::fromData(
+            vec![
+                Complex::polar(1.0, - theta / 2.0), Complex::new(0.0, 0.0),
+                Complex::new(0.0, 0.0), Complex::polar(1.0, theta / 2.0)
+            ], [2, 2]);
 
         matrix
     }

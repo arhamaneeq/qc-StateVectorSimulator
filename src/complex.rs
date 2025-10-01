@@ -104,3 +104,16 @@ impl std::ops::Div for Complex {
         result
     }
 }
+
+impl std::ops::Div<f32> for Complex {
+    type Output = Complex;
+
+    fn div(self, _rhs: f32) -> Complex {
+        let result: Complex = Complex::new( 
+            self.real / _rhs, 
+            self.imag / _rhs 
+        );
+
+        result
+    }
+}
