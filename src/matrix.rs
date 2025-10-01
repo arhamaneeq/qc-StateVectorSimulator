@@ -1,4 +1,4 @@
-use std::intrinsics::sqrtf32;
+use std::convert::identity;
 
 use crate::{complex::Complex, matrix};
 
@@ -34,7 +34,7 @@ impl Matrix {
         matrix
     }
 
-    pub fn fromData(data: Vector<Complex>, a: [usize; 2]) -> Matrix {
+    pub fn from_data(data: Vec<Complex>, a: [usize; 2]) -> Matrix {
         assert_eq!(data.len(), a[0] * a[1], "Data length does not match given shape!");
 
         let w: usize = a[0];
@@ -52,7 +52,7 @@ impl Matrix {
     }
 
     pub fn X() -> Matrix {
-        let matrix: Matrix = Matrix::fromData(
+        let matrix: Matrix = Matrix::from_data(
             vec![
                 Complex::new(0.0, 0.0), Complex::new(1.0, 0.0), 
                 Complex::new(1.0, 0.0), Complex::new(0.0, 0.0)], 
@@ -63,7 +63,7 @@ impl Matrix {
     }
 
     pub fn Y() -> Matrix {
-        let matrix: Matrix = Matrix::fromData(
+        let matrix: Matrix = Matrix::from_data(
             vec![
                 Complex::new(0.0, 0.0), Complex::new(0.0, -1.0),
                 Complex::new(0.0, 1.0), Complex::new(0.0, 0.0)],
@@ -74,7 +74,7 @@ impl Matrix {
     }
 
     pub fn Z() -> Matrix {
-        let matrix: Matrix = Matrix::fromData(
+        let matrix: Matrix = Matrix::from_data(
             vec![
                 Complex::new(1.0, 0.0), Complex::new(0.0, 0.0),
                 Complex::new(1.0, 0.0), Complex::new(-1.0, 0.0)], 
@@ -86,11 +86,11 @@ impl Matrix {
 
     pub fn H() -> Matrix {
         let s : f32 = (2.0f32).sqrt().recip();
-        let matrix : Matrix = Matrix::fromData(
+        let matrix : Matrix = Matrix::from_data(
             vec![
                 Complex::new(s, 0.0), Complex::new(s, 0.0),
                 Complex::new(s, 0.0), Complex::new(-s, 0.0)
-            ], [2,2])
+            ], [2,2]);
 
         matrix
     }
@@ -99,7 +99,7 @@ impl Matrix {
         let ct : f32 = (theta / 2.0f32).cos();
         let st : f32 = (theta / 2.0f32).sin();
 
-        let matrix : Matrix = Matrix::fromData(
+        let matrix : Matrix = Matrix::from_data(
             vec![
                 Complex::new(ct, 0.0), Complex::new(0.0, -st),
                 Complex::new(0.0, -st), Complex::new(ct, 0.0)
@@ -112,7 +112,7 @@ impl Matrix {
         let ct : f32 = (theta / 2.0f32).cos();
         let st : f32 = (theta / 2.0f32).sin();
 
-        let matrix : Matrix = Matrix::fromData(
+        let matrix : Matrix = Matrix::from_data(
             vec![
                 Complex::new(ct, 0.0), Complex::new(- st, 0.0),
                 Complex::new(st, 0.0), Complex::new(ct, 0.0)
@@ -122,7 +122,7 @@ impl Matrix {
     }
 
     pub fn Rz(theta: f32) -> Matrix {
-        let matrix : Matrix = Matrix::fromData(
+        let matrix : Matrix = Matrix::from_data(
             vec![
                 Complex::polar(1.0, - theta / 2.0), Complex::new(0.0, 0.0),
                 Complex::new(0.0, 0.0), Complex::polar(1.0, theta / 2.0)
@@ -131,7 +131,7 @@ impl Matrix {
         matrix
     }
 
-    pub fn transpose(self) -> Self {
+    pub fn transpose(&self) -> Self {
         let mut matrix: Matrix = Matrix::zeroes([self.height, self.width]);
 
         for i in 0..self.height {
@@ -143,7 +143,7 @@ impl Matrix {
         matrix
     }
 
-    pub fn conjugate(self) -> Self {
+    pub fn conjugate(&self) -> Self {
         let mut matrix: Matrix = Matrix::zeroes([self.height, self.width]);
 
         for i in 0..self.height {
@@ -155,8 +155,18 @@ impl Matrix {
         matrix
     }
 
-    pub fn dagger(self) -> Self {
+    pub fn dagger(&self) -> Self {
         self.conjugate().transpose()
+    }
+
+    pub fn is_unitary(&self) -> bool {
+        self.dagger() * self == Matrix::identity([self.width, self.height])
+    }
+}
+
+impl std::cmp::PartialEq for Matrix {
+    fn eq(&self, other: &Self) -> bool {
+        self.width == other.width && self.height == other.height && self.matrix == other.matrix
     }
 }
 
