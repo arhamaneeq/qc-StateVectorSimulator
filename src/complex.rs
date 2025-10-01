@@ -38,6 +38,12 @@ impl Complex {
     }
 }
 
+impl std::cmp::PartialEq for Complex {
+    fn eq(&self, other: &Self) -> bool {
+        self.real == other.real && self.imag == other.imag
+    }
+}
+
 impl std::ops::Add<Complex> for Complex {
     type Output = Complex;
 
