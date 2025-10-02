@@ -1,9 +1,12 @@
-use crate::{gate::Gate, matrix::Matrix};
+use std::os::linux::raw::stat;
+
+use crate::{complex::Complex, gate::Gate, matrix::Matrix};
 
 struct Circuit {
     qbits: usize,
     cbits: usize,
-    gates: Vec<Gate>
+    gates: Vec<Gate>,
+    unitaries: Vec<Matrix>
 }
 
 impl Circuit {
@@ -12,7 +15,29 @@ impl Circuit {
             qbits: _qbits,
             cbits: _cbits,
             gates: Vec::new(),
+            unitaries: Vec::new(),
         }
+    }
+
+    pub fn compile(&mut self) {
+        let n: usize = self.qbits;
+
+        for gate in &self.gates {
+            self.unitaries.push(gate.expand(n));
+        }
+    }
+
+    pub fn run(&self) -> Matrix {
+        let n: usize = self.qbits;
+
+        let mut statevector: Matrix = Matrix::zeroes([1 << n, 1]);
+        statevector[(0, 0)] = Complex::new(1.0, 0.0);
+
+        for unitary in &self.unitaries {
+            statevector = unitary.clone() * statevector;
+        }
+
+        statevector
     }
 
     pub fn h(&mut self, qbit: usize) {

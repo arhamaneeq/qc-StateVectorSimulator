@@ -35,7 +35,7 @@ impl Gate {
         }
     }
 
-    pub fn expand(self, n: usize) -> Matrix {
+    pub fn expand(&self, n: usize) -> Matrix {
         let mut unitary : Matrix = Matrix::identity([1,1]);
 
         if self.is_controlled() {
@@ -47,7 +47,7 @@ impl Gate {
                 p1_c = p1_c ^ Matrix::proj1();
             }
 
-            let base : Matrix = (p0_c ^ Matrix::I()) + (p1_c ^ self.matrix);
+            let base : Matrix = (p0_c ^ Matrix::I()) + (p1_c ^ self.matrix.clone());
 
             let mut perm = self.control.clone();
             perm.push(self.target);
