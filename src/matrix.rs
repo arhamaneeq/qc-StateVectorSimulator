@@ -157,6 +157,25 @@ impl Matrix {
         matrix
     }
 
+    pub fn permutation(n: usize, perm: &[usize]) -> Matrix {
+        assert_eq!(perm.len(), n);
+
+        let dim = 1usize << n;
+        let mut P = Matrix::zeroes([dim, dim]);
+
+        for i in 0..dim {
+            let mut new_index : usize = 0;
+            for (new_pos, &old_pos) in perm.iter().enumerate() {
+                let bit = (i >> old_pos) & 1;
+                new_index |= bit << new_pos;
+            }
+
+            P[(new_index, i)] = Complex::new(1.0, 0.0);
+        }
+
+        P
+    }
+
     pub fn transpose(&self) -> Self {
         let mut matrix: Matrix = Matrix::zeroes([self.height, self.width]);
 

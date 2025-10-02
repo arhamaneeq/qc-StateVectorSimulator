@@ -49,7 +49,15 @@ impl Gate {
 
             let base : Matrix = (p0_c ^ Matrix::I()) + (p1_c ^ self.matrix);
 
-            // TODO: build permutation matrix
+            let mut perm = self.control.clone();
+            perm.push(self.target);
+
+            let mut remaining: Vec<usize> = (0..n).filter(|q| !perm.contains(q)).collect();
+            perm.append(&mut remaining);
+
+            let P = Matrix::permutation(n, &perm);
+
+            unitary = P.dagger() * base * P;
         } else {
             for i in 0..n {
                 if i == self.target {
