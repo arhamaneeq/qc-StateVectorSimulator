@@ -2,7 +2,7 @@ use std::os::linux::raw::stat;
 
 use crate::{complex::Complex, gate::Gate, matrix::Matrix};
 
-struct Circuit {
+pub struct Circuit {
     qbits: usize,
     cbits: usize,
     gates: Vec<Gate>,
@@ -38,6 +38,10 @@ impl Circuit {
         }
 
         statevector
+    }
+
+    pub fn iter(&self) -> std::ops::Range<usize> {
+        0..self.qbits
     }
 
     pub fn h(&mut self, qbit: usize) {
