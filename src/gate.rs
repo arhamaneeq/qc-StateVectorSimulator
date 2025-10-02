@@ -36,6 +36,34 @@ impl Gate {
     }
 
     pub fn expand(self, n: usize) -> Matrix {
-        // TODO
+        let mut unitary : Matrix = Matrix::identity([1,1]);
+
+        if self.is_controlled() {
+            let mut p0_c : Matrix = Matrix::proj0();
+            let mut p1_c : Matrix = Matrix::proj1();
+
+            for i in 1..self.control.len() {
+                p0_c = p0_c ^ Matrix::proj0();
+                p1_c = p1_c ^ Matrix::proj1();
+            }
+
+            let base : Matrix = (p0_c ^ Matrix::I()) + (p1_c ^ self.matrix);
+
+            // TODO: build permutation matrix
+        } else {
+            for i in 0..n {
+                if i == self.target {
+                    unitary = unitary ^ self.matrix.clone();
+                } else {
+                    unitary = unitary ^ Matrix::I();
+                }
+            }
+        }
+
+        unitary
+    }
+
+    pub fn is_controlled(&self) -> bool {
+        self.control.len() != 0
     }
 }
