@@ -1,6 +1,4 @@
-use std::convert::identity;
-
-use crate::{complex::Complex, matrix};
+use crate::{complex::Complex};
 
 #[derive(Clone, Debug)]
 pub struct Matrix {
@@ -8,7 +6,7 @@ pub struct Matrix {
     width: usize,
     height: usize,
 }
-
+#[allow(non_snake_case)]
 impl Matrix {
     pub fn zeroes(a: [usize; 2]) -> Self {
         let rows: usize = a[0];

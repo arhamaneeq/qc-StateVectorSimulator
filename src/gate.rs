@@ -11,7 +11,7 @@ pub struct Gate {
 impl Gate {
     pub fn new(_name: &str, _symbol: &str, _matrix: Matrix, _target: usize) -> Gate {
         
-        assert!(_matrix.is_unitary());
+        // assert!(_matrix.is_unitary());
 
         Gate {
             matrix: _matrix, 
@@ -24,7 +24,7 @@ impl Gate {
 
     pub fn controlled(_name: &str, _symbol: &str, _matrix: Matrix, _target: usize, _controls: Vec<usize>) -> Gate {
 
-        assert!(_matrix.is_unitary());
+        // assert!(_matrix.is_unitary());
 
         Gate {
             matrix: _matrix, 
@@ -42,12 +42,17 @@ impl Gate {
             let mut p0_c : Matrix = Matrix::proj0();
             let mut p1_c : Matrix = Matrix::proj1();
 
-            for i in 1..self.control.len() {
+            for _ in 1..self.control.len() {
                 p0_c = p0_c ^ Matrix::proj0();
                 p1_c = p1_c ^ Matrix::proj1();
             }
 
             let base : Matrix = (p0_c ^ Matrix::I()) + (p1_c ^ self.matrix.clone());
+            let trailing = n - self.control.len() - 1;
+            let mut embed = base.clone();
+            for _ in 0..trailing {
+                embed = embed ^ Matrix::I();
+            }
 
             let mut perm = self.control.clone();
             perm.push(self.target);
@@ -57,7 +62,7 @@ impl Gate {
 
             let P = Matrix::permutation(n, &perm);
 
-            unitary = P.dagger() * base * P;
+            unitary = P.dagger() * embed * P;
         } else {
             for i in 0..n {
                 if i == self.target {

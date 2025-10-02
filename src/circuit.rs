@@ -1,5 +1,3 @@
-use std::os::linux::raw::stat;
-
 use crate::{complex::Complex, gate::Gate, matrix::Matrix};
 
 pub struct Circuit {
@@ -128,8 +126,8 @@ impl Circuit {
             "Controlled X",
             "CX",
             Matrix::X(),
-            target,
-            vec![control]
+            target % self.qbits,
+            vec![control % self.qbits]
 
         );
 
@@ -143,8 +141,8 @@ impl Circuit {
             "Controlled Y",
             "CY",
             Matrix::Y(),
-            target,
-            vec![control]
+            target % self.qbits,
+            vec![control % self.qbits]
 
         );
 
@@ -158,8 +156,8 @@ impl Circuit {
             "Controlled Z",
             "CZ",
             Matrix::Z(),
-            target,
-            vec![control]
+            target % self.qbits,
+            vec![control % self.qbits]
 
         );
 
@@ -175,8 +173,8 @@ impl Circuit {
             "Toffoli",
             "CCX",
             Matrix::X(),
-            target,
-            vec![control_1, control_2]
+            target % self.qbits,
+            vec![control_1 % self.qbits, control_2 % self.qbits]
 
         );
 
