@@ -51,6 +51,32 @@ impl Matrix {
         matrix
     }
 
+    pub fn I() -> Matrix {
+        let matrix: Matrix = Matrix::identity([2, 2]);
+
+        matrix
+    }
+
+    pub fn proj0() -> Matrix {
+        let matrix: Matrix = Matrix::from_data(
+            vec![
+                Complex::new(1.0, 0.0), Complex::new(0.0, 0.0),
+                Complex::new(0.0, 0.0), Complex::new(0.0, 0.0)
+            ], [2, 2]);
+
+        matrix
+    }
+
+    pub fn proj1() -> Matrix {
+        let matrix: Matrix = Matrix::from_data(
+            vec![
+                Complex::new(0.0, 0.0), Complex::new(0.0, 0.0),
+                Complex::new(0.0, 0.0), Complex::new(1.0, 0.0)
+            ], [2, 2]);
+
+        matrix
+    }
+
     pub fn X() -> Matrix {
         let matrix: Matrix = Matrix::from_data(
             vec![
@@ -160,7 +186,7 @@ impl Matrix {
     }
 
     pub fn is_unitary(&self) -> bool {
-        self.dagger() * self == Matrix::identity([self.width, self.height])
+        self.dagger() * self.clone() == Matrix::identity([self.width, self.height])
     }
 }
 
@@ -170,10 +196,28 @@ impl std::cmp::PartialEq for Matrix {
     }
 }
 
-impl std::ops::Mul<&Matrix> for Matrix {
+impl std::ops::Add<Matrix> for Matrix {
     type Output = Matrix;
 
-    fn mul(self: Matrix, _rhs: &Matrix) -> Matrix {
+    fn add(self, _rhs: Matrix) -> Matrix {
+        assert!(self.width == _rhs.width && self.height == _rhs.height);
+
+        let mut matrix: Matrix = Matrix::zeroes([self.width, self.height]);
+
+        for i in 0..self.width {
+            for j in 0..self.height {
+                matrix[(i, j)] = self[(i, j)] + _rhs[(i, j)];
+            }
+        }
+
+        matrix
+    }
+}
+
+impl std::ops::Mul<Matrix> for Matrix {
+    type Output = Matrix;
+
+    fn mul(self, _rhs: Matrix) -> Matrix {
         assert_eq!(self.width, _rhs.height, "Dimension mismatch!");
 
         let mut result: Matrix = Matrix::zeroes([self.height, _rhs.width]);
@@ -194,11 +238,11 @@ impl std::ops::Mul<&Matrix> for Matrix {
     }
 }
 
-impl std::ops::BitXor<&Matrix> for Matrix {
+impl std::ops::BitXor<Matrix> for Matrix {
     // Kronecker Product
     type Output = Matrix;
 
-    fn bitxor(self, _rhs: &Matrix) -> Self::Output {
+    fn bitxor(self, _rhs: Matrix) -> Self::Output {
         let m: usize = self.height;
         let n: usize = self.width;
         let p: usize = _rhs.height;
