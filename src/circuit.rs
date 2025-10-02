@@ -20,7 +20,7 @@ impl Circuit {
             "Hadamard",
             "H", 
             Matrix::H(), 
-            vec![qbit % self.qbits],
+            qbit % self.qbits,
         );
 
         self.gates.push(h_gate);
@@ -31,7 +31,7 @@ impl Circuit {
             "Pauli X",
             "X",
             Matrix::X(),
-            vec![qbit % self.qbits],
+            qbit % self.qbits,
         );
 
         self.gates.push(x_gate);
@@ -42,7 +42,7 @@ impl Circuit {
             "Pauli Y",
             "Y",
             Matrix::Y(),
-            vec![qbit % self.qbits]
+            qbit % self.qbits
         );
 
         self.gates.push(y_gate);
@@ -53,7 +53,7 @@ impl Circuit {
             "Pauli Z",
             "Z",
             Matrix::Z(),
-            vec![qbit % self.qbits],
+            qbit % self.qbits,
         );
 
         self.gates.push(z_gate);
@@ -64,7 +64,7 @@ impl Circuit {
             "Rotation X",
             "Rx",
             Matrix::Rx(theta),
-            vec![qbit % self.qbits]
+            qbit % self.qbits
         );
 
         self.gates.push(r_gate);
@@ -75,7 +75,7 @@ impl Circuit {
             "Rotation Y",
             "Ry",
             Matrix::Ry(theta),
-            vec![qbit % self.qbits]
+            qbit % self.qbits
         );
 
         self.gates.push(r_gate);
@@ -86,7 +86,7 @@ impl Circuit {
             "Rotation Z",
             "Rz",
             Matrix::Rz(theta),
-            vec![qbit % self.qbits]
+            qbit % self.qbits
         );
 
         self.gates.push(r_gate);
@@ -95,16 +95,71 @@ impl Circuit {
     pub fn cx(&mut self, control: usize, target: usize) {
         assert_ne!(control, target);
 
-        let cx_gate : Gate = Gate::new(
+        let c_gate : Gate = Gate::controlled(
             "Controlled X",
             "CX",
-            Matrix::proj0() ^ Matrix::I() + Matrix::proj1() ^ Matrix::X(),
-            vec![control, target]
+            Matrix::X(),
+            target,
+            vec![control]
+
         );
 
-        self.gates.push(cx_gate);
+        self.gates.push(c_gate);
     }
 
+    pub fn cy(&mut self, control: usize, target: usize) {
+        assert_ne!(control, target);
 
+        let c_gate : Gate = Gate::controlled(
+            "Controlled Y",
+            "CY",
+            Matrix::Y(),
+            target,
+            vec![control]
+
+        );
+
+        self.gates.push(c_gate);
+    }
+
+    pub fn cz(&mut self, control: usize, target: usize) {
+        assert_ne!(control, target);
+
+        let c_gate : Gate = Gate::controlled(
+            "Controlled Z",
+            "CZ",
+            Matrix::Z(),
+            target,
+            vec![control]
+
+        );
+
+        self.gates.push(c_gate);
+    }
+
+    pub fn ccx(&mut self, control_1: usize, control_2: usize, target: usize) {
+        assert_ne!(control_1, target);
+        assert_ne!(control_2, target);
+        assert_ne!(control_1, control_2);
+
+        let c_gate : Gate = Gate::controlled(
+            "Toffoli",
+            "CCX",
+            Matrix::X(),
+            target,
+            vec![control_1, control_2]
+
+        );
+
+        self.gates.push(c_gate);
+    }
+
+    pub fn swap(&mut self, q1: usize, q2: usize) {
+        assert_ne!(q1, q2);
+
+        self.cx(q1, q2);
+        self.cx(q2, q1);
+        self.cx(q1, q2);
+    }
 
 }
