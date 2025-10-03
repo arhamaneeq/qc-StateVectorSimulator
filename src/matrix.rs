@@ -6,7 +6,7 @@ pub struct Matrix {
     width: usize,
     height: usize,
 }
-#[allow(non_snake_case)]
+#[allow(non_snake_case, dead_code)]
 impl Matrix {
     pub fn zeroes(a: [usize; 2]) -> Self {
         let rows: usize = a[0];
@@ -19,6 +19,22 @@ impl Matrix {
             width: cols,
             height: rows,
         }
+    }
+
+    pub fn print(&self) {
+        println!("Matrix ({} x {}):", self.height, self.width);
+        println!("----------------------------------");
+
+        for i in 0..self.height {
+            print!("| ");
+            for j in 0..self.width {
+                let v = self[(i, j)];
+                print!("{:>8.3}+{:>8.3}i  ", v.real, v.imag);
+            }
+            println!("|");
+        }
+
+        println!("----------------------------------");
     }
 
     pub fn identity(a: [usize; 2]) -> Self {
