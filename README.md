@@ -29,8 +29,8 @@ fn main() {
     qc.h(0);
     qc.cx(0, 1);
 
-    circuit.compile();
-    circuit.run().print();
+    qc.compile();
+    qc.run().print();
 }
 ```
 ```shell
