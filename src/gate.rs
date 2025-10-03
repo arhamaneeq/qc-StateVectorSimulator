@@ -1,5 +1,6 @@
 use crate::matrix::Matrix;
 
+#[allow(dead_code)]
 pub struct Gate {
     name: String,
     symbol: String,
@@ -60,9 +61,9 @@ impl Gate {
             let mut remaining: Vec<usize> = (0..n).filter(|q| !perm.contains(q)).collect();
             perm.append(&mut remaining);
 
-            let P = Matrix::permutation(n, &perm);
+            let p: Matrix = Matrix::permutation(n, &perm);
 
-            unitary = P.dagger() * embed * P;
+            unitary = p.dagger() * embed * p;
         } else {
             for i in 0..n {
                 if i == self.target {

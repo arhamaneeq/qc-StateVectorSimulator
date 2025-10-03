@@ -1,9 +1,11 @@
 #[derive(Clone, Copy, Debug)]
+
 pub struct Complex {
     pub real: f32,
     pub imag: f32,
 }
 
+#[allow(dead_code)]
 impl Complex {
     pub fn new(real: f32, imag: f32) -> Self {
         Self {

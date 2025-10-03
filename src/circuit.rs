@@ -1,5 +1,6 @@
 use crate::{complex::Complex, gate::Gate, matrix::Matrix};
 
+#[allow(dead_code)]
 pub struct Circuit {
     qbits: usize,
     cbits: usize,
@@ -7,6 +8,7 @@ pub struct Circuit {
     unitaries: Vec<Matrix>
 }
 
+#[allow(dead_code, non_snake_case)]
 impl Circuit {
     pub fn new(_qbits: usize, _cbits: usize) -> Self {
         Self {

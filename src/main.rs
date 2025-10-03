@@ -6,12 +6,11 @@ mod matrix;
 mod circuit;
 
 fn main() {
-    let mut qc : Circuit = Circuit::new(4, 0);
+    let mut qc : Circuit = Circuit::new(2, 0);
 
-    for q in qc.iter() {qc.h(q)};
-    for q in qc.iter() {qc.cx(q, q + 1);}
-    for q in qc.iter() {qc.h(q)};
+    qc.h(0);
+    qc.cx(0, 1);
 
     qc.compile();
-    qc.run();
+    qc.run().print();
 }
