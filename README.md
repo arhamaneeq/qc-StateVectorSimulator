@@ -42,6 +42,26 @@ Matrix (4 x 1):
 |    0.707+   0.000i  |
 -----------------------
 ```
+```rust
+fn main() {
+    let mut qc = Circuit::new(2, 0);
+
+    for q in qc.iter() { qc.h(q) ;}
+    for q in qc.iter() { qc.cx(q, q + 1);}
+
+    circuit.compile();
+    circuit.run().print();
+}
+```
+```shell
+Matrix (4 x 1):
+-----------------------
+|    0.500+   0.000i  |
+|    0.500+   0.000i  |
+|    0.500+   0.000i  |
+|    0.500+   0.000i  |
+-----------------------
+```
 
 ## To-Do
 
