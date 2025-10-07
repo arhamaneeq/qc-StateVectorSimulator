@@ -49,8 +49,8 @@ fn main() {
     for q in qc.iter() { qc.h(q) ;}
     for q in qc.iter() { qc.cx(q, q + 1);}
 
-    circuit.compile();
-    circuit.run().print();
+    qc.compile();
+    qc.run().print();
 }
 ```
 ```shell
