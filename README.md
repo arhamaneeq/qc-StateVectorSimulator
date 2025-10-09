@@ -71,6 +71,7 @@ Matrix (4 x 1):
 - [x] Single Qubit Gate Support
 - [x] Multi Qubit Gate Support
 - [ ] Measurement
+- [ ] Add Noisy Model Support 
 ### Advanced
 - [ ] Parrelisation
 - [ ] Simplification
